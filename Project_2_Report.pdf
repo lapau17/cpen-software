@@ -1,0 +1,196 @@
+%PDF-1.4
+% report
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 5802 >>
+stream
+BT /F2 22 Tf 42 800 Td (Student Management API) Tj ET
+BT /F1 3 Tf 42 775 Td () Tj ET
+BT /F2 14 Tf 42 769 Td (CPEN 208 - Project 2 Report) Tj ET
+BT /F1 9 Tf 42 752 Td () Tj ET
+BT /F2 11 Tf 42 740 Td (Computer Engineering Department Student Management System) Tj ET
+BT /F1 9 Tf 42 726 Td () Tj ET
+BT /F1 9 Tf 42 714 Td () Tj ET
+BT /F1 10 Tf 42 702 Td (This report is based on the implemented project source code, database scripts, and) Tj ET
+BT /F1 10 Tf 42 689 Td (README. It describes only functionality and verification evidenced in the repository.) Tj ET
+BT /F1 9 Tf 42 676 Td () Tj ET
+BT /F1 9 Tf 42 664 Td () Tj ET
+BT /F1 10 Tf 42 652 Td (Implementation: Next.js 14 application with PostgreSQL) Tj ET
+BT /F1 10 Tf 42 639 Td (Deliverable: REST-style JSON web service and authenticated student/admin portal) Tj ET
+BT /F2 14 Tf 42 626 Td (1. Introduction and objective) Tj ET
+BT /F1 3 Tf 42 609 Td () Tj ET
+BT /F1 9 Tf 42 603 Td (The Student Management System supports student records, courses, teaching assignments, fees, and) Tj ET
+BT /F1 9 Tf 42 591 Td (payments for the Computer Engineering Department. Project 1 established the PostgreSQL database) Tj ET
+BT /F1 9 Tf 42 579 Td (functionality. Project 2 exposes that functionality through Next.js App Router API route handlers under) Tj ET
+BT /F1 9 Tf 42 567 Td (src/app/api.) Tj ET
+BT /F1 9 Tf 42 555 Td (The objective is to provide JSON web-service endpoints used by the existing student portal and) Tj ET
+BT /F1 9 Tf 42 543 Td (administrator interface while enforcing role-based access. Students can retrieve only their own) Tj ET
+BT /F1 9 Tf 42 531 Td (personal, enrolment, fee, payment, and outstanding-balance data. Administrators can retrieve) Tj ET
+BT /F1 9 Tf 42 519 Td (department-wide and individual student data.) Tj ET
+BT /F2 14 Tf 42 507 Td (2. Technologies used) Tj ET
+BT /F1 3 Tf 42 490 Td () Tj ET
+BT /F1 9 Tf 42 484 Td (- Next.js 14.2.35 App Router for pages, dashboards, and API route handlers.) Tj ET
+BT /F1 9 Tf 42 472 Td (- React 18 and JavaScript for the student and administrator interfaces.) Tj ET
+BT /F1 9 Tf 42 460 Td (- Node.js server runtime; pg PostgreSQL driver for the shared connection pool.) Tj ET
+BT /F1 9 Tf 42 448 Td (- PostgreSQL database named cpen208_project.) Tj ET
+BT /F1 9 Tf 42 436 Td (- bcrypt for password hashing and login verification.) Tj ET
+BT /F2 14 Tf 42 424 Td (3. Database design and Project 1 functions) Tj ET
+BT /F1 3 Tf 42 407 Td () Tj ET
+BT /F1 9 Tf 42 401 Td (The schema contains students, courses, enrollments, lecturers, teaching_assistants, course_lecturers,) Tj ET
+BT /F1 9 Tf 42 389 Td (lecturer_tas, fees, payments, and users. The course_lecturers and lecturer_tas junction tables represent) Tj ET
+BT /F1 9 Tf 42 377 Td (teaching assignments. The users table stores student/admin roles and password hashes.) Tj ET
+BT /F1 9 Tf 42 365 Td (- Student personal information: students table; exposed by /api/me and /api/students/{student_id}.) Tj ET
+BT /F1 9 Tf 42 353 Td (- Student fees/payments: fees and payments tables; exposed by my-* and student-specific endpoints.) Tj ET
+BT /F1 9 Tf 42 341 Td (- Course enrollment: enrollments joined to courses; exposed by /api/my-courses and) Tj ET
+BT /F1 9 Tf 42 329 Td (/api/students/{student_id}/courses.) Tj ET
+BT /F1 9 Tf 42 317 Td (- Lecturer-to-course assignment: course_lecturers; exposed by /api/courses/{course_id}/lecturer.) Tj ET
+BT /F1 9 Tf 42 305 Td (- Lecturer-to-TA assignment: lecturer_tas; exposed by) Tj ET
+BT /F1 9 Tf 42 293 Td (/api/lecturers/{lecturer_id}/teaching-assistants.) Tj ET
+BT /F1 9 Tf 42 281 Td (Two calculate_outstanding_fees database functions are included: a department-wide overload and a) Tj ET
+BT /F1 9 Tf 42 269 Td (student-ID overload. The student endpoint uses the parameterized student-ID overload.) Tj ET
+BT /F2 14 Tf 42 257 Td (4. Project 2 API/web-service implementation) Tj ET
+BT /F1 3 Tf 42 240 Td () Tj ET
+BT /F1 9 Tf 42 234 Td (Each API endpoint is a Next.js route.js handler. Shared modules provide the PostgreSQL pool, JSON) Tj ET
+BT /F1 9 Tf 42 222 Td (response helpers, ID validation, signed session handling, and authorization guards. Data routes return) Tj ET
+BT /F1 9 Tf 42 210 Td (JSON success/data envelopes; authentication routes return JSON message or error values.) Tj ET
+BT /F1 9 Tf 42 198 Td (Status codes implemented are 200 for successful reads, 201 for successful registration, 400 for invalid) Tj ET
+BT /F1 9 Tf 42 186 Td (input, 401 for missing authentication, 403 for role or ownership violations, 404 for missing resources,) Tj ET
+BT /F1 9 Tf 42 174 Td (and 500 for unexpected server/database errors.) Tj ET
+BT /F2 14 Tf 42 162 Td (5. API endpoint inventory) Tj ET
+BT /F1 3 Tf 42 145 Td () Tj ET
+BT /F2 7.8 Tf 42 139 Td (METHOD PATH                                              ACCESS                 PURPOSE) Tj ET
+BT /F1 7.7 Tf 42 128.2 Td (POST /api/register Public Create student account; JSON studentId, email, password, confirmPassword.) Tj ET
+BT /F1 7.7 Tf 42 117.49999999999999 Td (POST /api/login Public Student login; JSON studentId and password.) Tj ET
+BT /F1 7.7 Tf 42 106.79999999999998 Td (POST /api/admin/login Public Administrator login; JSON email and password.) Tj ET
+BT /F1 7.7 Tf 42 96.09999999999998 Td (POST /api/logout Any visitor Clear current session cookie.) Tj ET
+BT /F1 7.7 Tf 42 85.39999999999998 Td (GET /api/me Student Current student personal record.) Tj ET
+BT /F1 7.7 Tf 42 74.69999999999997 Td (GET /api/my-courses Student Current student courses, enrolments, lecturers.) Tj ET
+BT /F1 7.7 Tf 42 63.99999999999997 Td (GET /api/my-fees Student Current student fees, payments, balances.) Tj ET
+BT /F1 7.7 Tf 42 53.29999999999997 Td (GET /api/my-payments Student Current student payment history.) Tj ET
+BT /F1 7 Tf 500 22 Td (Page 1 of 3) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 7073 >>
+stream
+BT /F1 7.7 Tf 42 800 Td (GET /api/my-outstanding-fees Student Outstanding-fee results and total.) Tj ET
+BT /F1 7.7 Tf 42 789.3 Td (GET /api/students Admin All student personal records.) Tj ET
+BT /F1 7.7 Tf 42 778.5999999999999 Td (GET /api/students/{student_id} Student owner/Admin One student personal record.) Tj ET
+BT /F1 7.7 Tf 42 767.8999999999999 Td (GET /api/students/{student_id}/courses Student owner/Admin One student enrolments.) Tj ET
+BT /F1 7.7 Tf 42 757.1999999999998 Td (GET /api/students/{student_id}/fees Student owner/Admin One student fees and balance.) Tj ET
+BT /F1 7.7 Tf 42 746.4999999999998 Td (GET /api/students/{student_id}/payments Student owner/Admin One student payment history.) Tj ET
+BT /F1 7.7 Tf 42 735.7999999999997 Td (GET /api/students/{student_id}/outstanding-fees Student owner/Admin One student outstanding-fee results.) Tj ET
+BT /F1 7.7 Tf 42 725.0999999999997 Td (GET /api/courses Public Course catalogue.) Tj ET
+BT /F1 7.7 Tf 42 714.3999999999996 Td (GET /api/courses/{course_id}/lecturer Public Course-to-lecturer assignment\(s\).) Tj ET
+BT /F1 7.7 Tf 42 703.6999999999996 Td (GET /api/lecturers Public Lecturer directory.) Tj ET
+BT /F1 7.7 Tf 42 692.9999999999995 Td (GET /api/lecturers/{lecturer_id}/teaching-assistants Public Lecturer-to-TA assignment\(s\).) Tj ET
+BT /F1 7.7 Tf 42 682.2999999999995 Td (GET /api/teaching-assistants Public Teaching-assistant directory.) Tj ET
+BT /F1 7.7 Tf 42 671.5999999999995 Td (GET /api/outstanding-fees Admin Department-wide outstanding-fee results.) Tj ET
+BT /F1 7.7 Tf 42 660.8999999999994 Td (GET /api/admin/stats Admin Department totals.) Tj ET
+BT /F1 7.7 Tf 42 650.1999999999994 Td (GET /api/admin/students?search= Admin Student directory/balances; search optional.) Tj ET
+BT /F1 7.7 Tf 42 639.4999999999993 Td (GET /api/admin/students/{student_id} Admin Student detail, courses, fees, payments.) Tj ET
+BT /F1 7.7 Tf 42 628.7999999999993 Td (GET /api/admin/resources/{resource} Admin Whitelisted department resource table.) Tj ET
+BT /F1 7.7 Tf 42 618.0999999999992 Td (GET /api/test-db Admin Protected connection diagnostic.) Tj ET
+BT /F1 8 Tf 42 607.3999999999992 Td (student_id and course_id must be non-empty alphanumeric IDs \(hyphens permitted\). lecturer_id must be a) Tj ET
+BT /F1 8 Tf 42 596.3999999999992 Td (positive integer. The resource name is limited to a fixed query whitelist.) Tj ET
+BT /F2 14 Tf 42 585.3999999999992 Td (6. Authentication, authorization, and security) Tj ET
+BT /F1 3 Tf 42 568.3999999999992 Td () Tj ET
+BT /F1 9 Tf 42 562.3999999999992 Td (- Passwords are hashed/verified with bcrypt; API responses do not expose passwords or password) Tj ET
+BT /F1 9 Tf 42 550.3999999999992 Td (hashes.) Tj ET
+BT /F1 9 Tf 42 538.3999999999992 Td (- Login produces an HMAC-signed HTTP-only session cookie with an eight-hour lifetime, sameSite=lax,) Tj ET
+BT /F1 9 Tf 42 526.3999999999992 Td (and secure enabled in production.) Tj ET
+BT /F1 9 Tf 42 514.3999999999992 Td (- The token contains only role, optional student ID, and expiry; SESSION_SECRET is required and kept) Tj ET
+BT /F1 9 Tf 42 502.3999999999992 Td (in environment configuration.) Tj ET
+BT /F1 9 Tf 42 490.3999999999992 Td (- requireStudent, requireAdmin, and requireStudentOrAdmin enforce role and student-record ownership.) Tj ET
+BT /F1 9 Tf 42 478.3999999999992 Td (- Student-only routes derive the student ID from the signed session. Department-wide balance and) Tj ET
+BT /F1 9 Tf 42 466.3999999999992 Td (diagnostic routes require admin.) Tj ET
+BT /F1 9 Tf 42 454.3999999999992 Td (- SQL uses parameter placeholders with pg. Dynamic admin resource selection uses a fixed in-code) Tj ET
+BT /F1 9 Tf 42 442.3999999999992 Td (query whitelist.) Tj ET
+BT /F1 9 Tf 42 430.3999999999992 Td (- Database environment values are not returned, and database errors are reported through generic) Tj ET
+BT /F1 9 Tf 42 418.3999999999992 Td (server-error JSON.) Tj ET
+BT /F2 14 Tf 42 406.3999999999992 Td (7. Database scripts and backup) Tj ET
+BT /F1 3 Tf 42 389.3999999999992 Td () Tj ET
+BT /F1 9 Tf 42 383.3999999999992 Td (- database/create_tables.sql: exported schema, constraints, sequences, and outstanding-fee functions.) Tj ET
+BT /F1 9 Tf 42 371.3999999999992 Td (- database/insert_data.sql: project data inserts.) Tj ET
+BT /F1 9 Tf 42 359.3999999999992 Td (- database/functions.sql: standalone outstanding-fee function definitions.) Tj ET
+BT /F1 9 Tf 42 347.3999999999992 Td (- database/backup.sql: database export/backup for submission or restoration reference.) Tj ET
+BT /F2 14 Tf 42 335.3999999999992 Td (8. Next.js application and dashboard) Tj ET
+BT /F1 3 Tf 42 318.3999999999992 Td () Tj ET
+BT /F1 9 Tf 42 312.3999999999992 Td (The existing authenticated student portal uses /api/me, /api/my-courses, /api/my-fees, /api/my-payments,) Tj ET
+BT /F1 9 Tf 42 300.3999999999992 Td (and /api/my-outstanding-fees. It includes profile, courses/enrolments, fees, payments,) Tj ET
+BT /F1 9 Tf 42 288.3999999999992 Td (outstanding-balance pages, and a dashboard summary. The administrator interface includes a dashboard,) Tj ET
+BT /F1 9 Tf 42 276.3999999999992 Td (searchable student directory, per-student detail page, department statistics, and resource tables. The) Tj ET
+BT /F1 9 Tf 42 264.3999999999992 Td (Project 2 API work preserves these interfaces.) Tj ET
+BT /F2 14 Tf 42 252.39999999999918 Td (9. Testing and verification performed) Tj ET
+BT /F1 3 Tf 42 235.39999999999918 Td () Tj ET
+BT /F1 9 Tf 42 229.39999999999918 Td (- Inspected all API route files, shared database/auth helpers, database schema/functions, UI API) Tj ET
+BT /F1 9 Tf 42 217.39999999999918 Td (consumers, and README.) Tj ET
+BT /F1 9 Tf 42 205.39999999999918 Td (- node --check passed for every route.js API file.) Tj ET
+BT /F1 9 Tf 42 193.39999999999918 Td (- git diff --check completed without whitespace errors.) Tj ET
+BT /F1 9 Tf 42 181.39999999999918 Td (- npm.cmd run build reached Next.js 'Compiled successfully'. The environment execution limit) Tj ET
+BT /F1 9 Tf 42 169.39999999999918 Td (interrupted the later lint/type-check stage; no error was reported before timeout.) Tj ET
+BT /F1 9 Tf 42 157.39999999999918 Td (- A separate ESLint invocation also timed out without diagnostics. This report therefore does not) Tj ET
+BT /F1 9 Tf 42 145.39999999999918 Td (claim a completed lint pass.) Tj ET
+BT /F1 9 Tf 42 133.39999999999918 Td (The README contains example PowerShell requests and invalid/unknown-ID cases. Full live endpoint testing) Tj ET
+BT /F1 9 Tf 42 121.39999999999918 Td (requires the configured PostgreSQL instance and valid credentials; no unavailable live-test results are) Tj ET
+BT /F1 9 Tf 42 109.39999999999918 Td (claimed here.) Tj ET
+BT /F2 14 Tf 42 97.39999999999918 Td (10. Assumptions and conclusion) Tj ET
+BT /F1 3 Tf 42 80.39999999999918 Td () Tj ET
+BT /F1 9 Tf 42 74.39999999999918 Td (- The database has been loaded/restored from the supplied scripts and .env.local contains valid) Tj ET
+BT /F1 9 Tf 42 62.39999999999918 Td (connection values.) Tj ET
+BT /F1 7 Tf 500 22 Td (Page 2 of 3) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1030 >>
+stream
+BT /F1 9 Tf 42 800 Td (- The existing public course, lecturer, TA, and assignment directory routes remain public; sensitive) Tj ET
+BT /F1 9 Tf 42 788 Td (student and department-wide data routes are role-protected.) Tj ET
+BT /F1 9 Tf 42 776 Td (- The implemented API provides read access for Project 1 functions plus account/session operations;) Tj ET
+BT /F1 9 Tf 42 764 Td (browser management CRUD is not claimed.) Tj ET
+BT /F1 9 Tf 42 752 Td (Project 2 delivers a JSON web service over the Project 1 PostgreSQL Student Management System. All five) Tj ET
+BT /F1 9 Tf 42 740 Td (required functional areas are exposed through APIs. The implementation combines role/ownership checks,) Tj ET
+BT /F1 9 Tf 42 728 Td (signed HTTP-only sessions, bcrypt, parameterized SQL, controlled errors, and included database) Tj ET
+BT /F1 9 Tf 42 716 Td (scripts/backup. It is ready for live testing with its configured PostgreSQL environment and repository) Tj ET
+BT /F1 9 Tf 42 704 Td (submission.) Tj ET
+BT /F1 7 Tf 500 22 Td (Page 3 of 3) Tj ET
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000018 00000 n 
+0000000067 00000 n 
+0000000136 00000 n 
+0000000206 00000 n 
+0000000281 00000 n 
+0000000417 00000 n 
+0000006270 00000 n 
+0000006406 00000 n 
+0000013530 00000 n 
+0000013667 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+14749
+%%EOF
